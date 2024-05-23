@@ -1,12 +1,16 @@
 <template>
-  <div>
-    <div v-if="isAuth">
-      <router-link to="/">Accueil</router-link> |
-      <router-link to="/about">À propos</router-link>
-      <span>{{user.displayName ? user.displayName : user.email }}</span>
-      <button @click="logOut">Log out</button>
+  <div class="app-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div v-if="isAuth" class="my_nav col-12 col-md-2">
+          <!-- <router-link to="/">Accueil</router-link> -->
+          <!-- <router-link to="/about">À propos</router-link> -->
+          <span>{{ user.displayName ? user.displayName : user.email }}</span>
+          <button @click="logOut">Log out</button>
+        </div>
+        <router-view class="col-12 col-md-10"></router-view>
+      </div>
     </div>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -27,9 +31,9 @@ export default {
       if (user) {
         this.isAuth = true
         this.user = user
-        this.$router.push({name: 'home'})
+        this.$router.push({ name: 'home' })
       }
-      else this.$router.push({name: 'login'})
+      else this.$router.push({ name: 'login' })
     });
   },
   methods: {
@@ -49,11 +53,35 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: system-ui;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
+}
+
+.app-body {
+  background-color: #212121;
+  min-height: 100vh;
+}
+
+.my_nav {
+  background-color: #171717;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .my_nav {
+    height: 100vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .my_nav {
+    height: 100%;
+  }
 }
 </style>

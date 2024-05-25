@@ -17,7 +17,8 @@
         <button>gpt-neo</button>
         <button class="active">gpt2</button>
         <input id="input" type="text" placeholder="Message au model">
-        <img @click="askServer" src="@/assets/arrow.png" width="45" alt="">
+        <img v-if="!req_loading" @click="askServer" src="@/assets/arrow.png" width="45" alt="">
+        <img v-else class="my_loader" src="@/assets/loading.png" width="30" alt="">
       </div>
       <span>Le model peut faire des erreurs. Envisagez de vérifier les informations importantes.</span>
     </div>
@@ -32,11 +33,13 @@ export default {
     return {
       text: "",
       items: [],
-      loading: true
+      loading: true,
+      req_loading: false
     }
   },
   methods: {
     async askServer() {
+      this.req_loading = true
       try {
         const auth = getAuth();
         const db = getDatabase();
@@ -71,6 +74,11 @@ export default {
       } catch (error) {
         console.error("Erreur lors de la requête :", error);
       }
+      this.req_loading = false
+      window.scrollTo({
+        top: document.body.scrollHeight, // Fait défiler jusqu'à la hauteur totale du document
+        behavior: 'smooth' // Défilement en douceur
+      });
     },
     fetchItems(user) {
       const db = getDatabase();
@@ -109,6 +117,7 @@ export default {
   background-color: #212121;
   min-height: 100vh;
   color: #e4e4e4;
+  padding-top: 100px;
 }
 
 .item {

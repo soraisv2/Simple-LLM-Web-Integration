@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div v-if="isAuth" class="my_nav">
-          <img v-if="user.photoURL" :src="user.photoURL" alt="User Image" class="user-image"/>
+          <img v-if="user.photoURL" :src="user.photoURL" alt="User Image" class="user-image" />
           <span v-else>{{ user.displayName ? user.displayName : user.email }}</span>
           <button @click="logOut">Log out</button>
         </div>
@@ -98,4 +98,17 @@ export default {
   border: 2px solid grey;
 }
 
+.my_loader {
+    animation: rotate 0.5s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

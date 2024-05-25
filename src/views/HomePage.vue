@@ -39,7 +39,7 @@ export default {
         const auth = getAuth();
         const db = getDatabase();
         const inputText = document.getElementById("input").value;
-        const response = await fetch("https://srv531858.hstgr.cloud:5000/generate", {
+        const response = await fetch("http://213.210.20.155:5000/generate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

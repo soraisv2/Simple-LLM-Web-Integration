@@ -107,6 +107,7 @@ export default {
 .home {
   /* padding: 50px 400px; */
   background-color: #212121;
+  min-height: 100vh;
   color: #e4e4e4;
 }
 

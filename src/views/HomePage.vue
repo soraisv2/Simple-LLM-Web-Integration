@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div v-if="loading">Chargement...</div>
-    <div v-else class="row">
+    <div v-else class="row" style="padding-bottom: 75px;">
       <div v-for="item in items" :key="item.id" class="item col-12 col-lg-6 offset-lg-3">
         <div class="input-container">
           <p class="input">{{ item.input }}</p>
@@ -14,6 +14,8 @@
     </div>
     <div class="prompt">
       <div class="prompt-container">
+        <button>gpt-neo</button>
+        <button class="active">gpt2</button>
         <input id="input" type="text" placeholder="Message au model">
         <img @click="askServer" src="@/assets/arrow.png" width="45" alt="">
       </div>
@@ -104,6 +106,7 @@ export default {
 <style>
 .home {
   /* padding: 50px 400px; */
+  background-color: #212121;
   color: #e4e4e4;
 }
 
@@ -138,6 +141,8 @@ export default {
   right: 0;
   width: 100%;
   padding: 10px;
+
+  background-color: #212121;
 }
 
 .prompt .prompt-container {
@@ -145,6 +150,25 @@ export default {
   justify-content: center;
   align-items: center;
   /* background-color: #2f2f2f; */
+}
+
+.prompt .prompt-container button {
+  border: none;
+  border-radius: 15px;
+  padding: 8px 20px;
+  background-color: transparent;
+  color: #e3e3e3;
+  margin: 0 10px;
+  transition-duration: 0.4s;
+}
+
+.prompt .prompt-container button:hover {
+  background-color: #2f2f2f;
+  transition-duration: 0.4s;
+}
+
+.active {
+  background-color: #2f2f2f !important;
 }
 
 .prompt span {
@@ -161,16 +185,17 @@ export default {
   color: #e3e3e3;
   font-size: 16px;
   outline: none;
+  /* margin: 0 10px; */
 }
 
 @media (min-width: 768px) {
 
   .prompt {
-    width: 80%;
+    width: 100%;
   }
 
   .prompt input {
-    width: 50%;
+    width: 40%;
   }
 
 }

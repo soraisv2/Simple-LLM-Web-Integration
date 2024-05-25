@@ -2,13 +2,12 @@
   <div class="app-body">
     <div class="container-fluid">
       <div class="row">
-        <div v-if="isAuth" class="my_nav col-12 col-md-2">
-          <!-- <router-link to="/">Accueil</router-link> -->
-          <!-- <router-link to="/about">À propos</router-link> -->
-          <span>{{ user.displayName ? user.displayName : user.email }}</span>
+        <div v-if="isAuth" class="my_nav">
+          <img v-if="user.photoURL" :src="user.photoURL" alt="User Image" class="user-image"/>
+          <span v-else>{{ user.displayName ? user.displayName : user.email }}</span>
           <button @click="logOut">Log out</button>
         </div>
-        <router-view class="col-12 col-md-10"></router-view>
+        <router-view class=""></router-view>
       </div>
     </div>
   </div>
@@ -57,31 +56,46 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-
+  color: #dcdcdc;
 }
 
 .app-body {
-  background-color: #212121;
+  background-color: #f0f0f0;
   min-height: 100vh;
 }
 
 .my_nav {
-  background-color: #171717;
+  background-color: #212121;
   display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+  height: 60px;
+  position: fixed;
 }
 
-@media (min-width: 768px) {
-  .my_nav {
-    height: 100vh;
-  }
+.my_nav button {
+  border: none;
+  border-radius: 10px;
+  padding: 0px 18px;
+  height: 30px;
+  background-color: transparent;
+  border: 1px solid red;
+  color: #ff0000;
+  margin-left: 20px;
+  transition-duration: 0.4s;
 }
 
-@media (max-width: 768px) {
-  .my_nav {
-    height: 100%;
-  }
+.my_nav button:hover {
+  transition-duration: 0.4s;
+  background-color: red;
+  color: white;
 }
+
+.my_nav img {
+  border-radius: 100px;
+  width: 40px;
+  border: 2px solid grey;
+}
+
 </style>

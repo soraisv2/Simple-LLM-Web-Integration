@@ -5,6 +5,7 @@
         <div v-if="isAuth" class="my_nav">
           <img v-if="user.photoURL" :src="user.photoURL" alt="User Image" class="user-image" />
           <span v-else>{{ user.displayName ? user.displayName : user.email }}</span>
+          <button @click="clearConversation">Effacer la conversation</button>
           <button @click="logOut">Log out</button>
         </div>
         <router-view class=""></router-view>
@@ -15,6 +16,7 @@
 
 <script>
 import { onAuthStateChanged, getAuth, signOut } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 
 export default {
   name: 'App',
@@ -45,7 +47,25 @@ export default {
         .catch((error) => {
           console.error("Erreur lors de la déconnexion :", error);
         });
+    },
+    async clearConversation() {
+    try {
+      const auth = getAuth();
+      const db = getDatabase();
+      const user = auth.currentUser;
+
+      if (user) {
+        const userResultsRef = ref(db, 'users/' + user.uid + '/results');
+        await set(userResultsRef, null); // Cette ligne supprime toutes les données sous la référence userResultsRef
+        console.log("Conversation effacée avec succès");
+        this.items = []; // Mise à jour de l'affichage après la suppression des données
+      } else {
+        console.error("User not authenticated");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression de la conversation :", error);
     }
+  }
   }
 }
 </script>
@@ -78,7 +98,7 @@ export default {
   border: none;
   border-radius: 10px;
   padding: 0px 18px;
-  height: 30px;
+  height: 40px;
   background-color: transparent;
   border: 1px solid red;
   color: #ff0000;

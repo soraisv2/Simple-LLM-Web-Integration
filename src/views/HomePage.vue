@@ -13,12 +13,21 @@
       </div>
     </div>
     <div class="prompt">
-      <div class="prompt-container">
-        <button>gpt-neo</button>
-        <button class="active">gpt2</button>
-        <input id="input" type="text" placeholder="Message au model">
-        <img v-if="!req_loading" @click="askServer" src="@/assets/arrow.png" width="45" alt="">
-        <img v-else class="my_loader" src="@/assets/loading.png" width="30" alt="">
+      <div class="prompt-container row">
+        <div class="col-12 col-md-4" style="display: flex; justify-content: flex-end;">
+          <button @click="selectModel('gpt-neo')" :class="{ active: selected_model === 'gpt-neo' }">gpt-neo</button>
+          <button @click="selectModel('gpt2')" :class="{ active: selected_model === 'gpt2' }">gpt2</button>
+          <button @click="selectModel('gpt3')" :class="{ active: selected_model === 'gpt3' }">gpt3</button>
+        </div>
+        <div class="col-12 col-md-8" style="display: flex; justify-content: flex-start;">
+          <input id="input" type="text" @keyup.enter="askServer" placeholder="Message au model">
+          <div>
+            <img v-if="!req_loading" @click="askServer" src="@/assets/arrow.png" width="55" alt="">
+            <div style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
+              <img v-if="req_loading" class="my_loader" src="@/assets/loading.png" width="30" alt="">
+            </div>
+          </div>
+        </div>
       </div>
       <span>Le model peut faire des erreurs. Envisagez de vérifier les informations importantes.</span>
     </div>
@@ -28,28 +37,31 @@
 <script>
 import { getDatabase, ref, push, onValue } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 export default {
   data() {
     return {
       text: "",
       items: [],
       loading: true,
-      req_loading: false
+      req_loading: false,
+      selected_model: "gpt3",
     }
   },
   methods: {
     async askServer() {
-      this.req_loading = true
       try {
         const auth = getAuth();
         const db = getDatabase();
         const inputText = document.getElementById("input").value;
+        if (inputText == "") return
+        this.req_loading = true
         const response = await fetch("http://213.210.20.155:5000/generate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ input_text: inputText })
+          body: JSON.stringify({ input_text: inputText, model: this.selected_model })
         });
 
         if (!response.ok) {
@@ -79,6 +91,7 @@ export default {
         top: document.body.scrollHeight, // Fait défiler jusqu'à la hauteur totale du document
         behavior: 'smooth' // Défilement en douceur
       });
+      document.getElementById("input").value = ""
     },
     fetchItems(user) {
       const db = getDatabase();
@@ -95,6 +108,9 @@ export default {
         }
         this.loading = false;
       });
+    },
+    selectModel(model) {
+      this.selected_model = model;
     }
   },
   created() {

@@ -1,7 +1,8 @@
 <template>
     <div class="container">
-        <div class="row" style="min-height: 100vh; padding: 50px;">
-            <form class="col-12 col-md-6 offset-md-3 col-lg-3 offset-lg-5" @submit.prevent="isHaveAnAccount ? login() : register()">
+        <div class="row" style="min-height: 100vh;">
+            <form class="f-container col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4"
+                @submit.prevent="isHaveAnAccount ? login() : register()">
                 <h1>Baby GPT</h1>
                 <div v-if="!isHaveAnAccount">
                     <p>Bienvenu, inscrivez vous pour chatter</p>
@@ -9,8 +10,14 @@
                         <input v-model="registerEmail" type="email" placeholder="Email" required /><br>
                         <input v-model="registerPassword" type="password" placeholder="Password" required />
                     </div>
-                    <button id="submit" type="submit">Inscription</button><br>
-                    <span class="span">Déjà un compte ? <a style="color: blue;" @click.prevent="isHaveAnAccount = true">Connection</a></span>
+                    <button id="submit" type="submit">
+                        <span v-if="!loading">Inscription</span>
+                        <div v-else>
+                            <img class="my_loader" src="@/assets/loading.png" width="30" alt="">
+                        </div>
+                    </button>
+                    <span class="span">Déjà un compte ? <a style="color: blue;"
+                            @click.prevent="isHaveAnAccount = true">Connection</a></span>
                     <button class="g-btn" @click="signInWithGoogle"><img
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
                             alt="">Se connecter avec Google</button>
@@ -21,8 +28,14 @@
                         <input v-model="loginEmail" type="email" placeholder="Email" required /><br>
                         <input v-model="loginPassword" type="password" placeholder="Password" required />
                     </div>
-                    <button id="submit" type="submit">Connection</button><br>
-                    <span class="span">Déjà un compte ? <a style="color: blue;" @click.prevent="isHaveAnAccount = false">Créer un
+                    <button id="submit" type="submit">
+                        <span v-if="!loading">Connection</span>
+                        <div v-else>
+                            <img class="my_loader" src="@/assets/loading.png" width="30" alt="">
+                        </div>
+                    </button>
+                    <span class="span">Déjà un compte ? <a style="color: blue;"
+                            @click.prevent="isHaveAnAccount = false">Créer un
                             compte</a></span>
                     <button class="g-btn" @click="signInWithGoogle"><img
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"
@@ -43,11 +56,13 @@ export default {
             registerEmail: '',
             registerPassword: '',
             loginEmail: '',
-            loginPassword: ''
+            loginPassword: '',
+            loading: false
         }
     },
     methods: {
         async signInWithGoogle() {
+            this.g_loading = true
             const auth = getAuth()
             try {
                 const provider = new GoogleAuthProvider();
@@ -59,19 +74,23 @@ export default {
             }
         },
         async register() {
+            this.loading = true
             const auth = getAuth()
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, this.registerEmail, this.registerPassword);
                 console.log(userCredential.user.uid);
+                this.loading = false
                 this.$router.push({ name: 'home' });
             } catch (error) {
                 console.log(error);
             }
         },
         async login() {
+            this.loading = true
             const auth = getAuth()
             try {
                 await signInWithEmailAndPassword(auth, this.loginEmail, this.loginPassword);
+                this.loading = false
                 this.$router.push({ name: 'home' });
             } catch (error) {
                 console.log(error);
@@ -90,6 +109,12 @@ form {
     /* background-color: blue; */
     border-radius: 20px;
     text-align: left;
+}
+
+@media (min-width: 1230px) {
+    .f-container {
+        padding: 0 100px;
+    }
 }
 
 form h1 {
@@ -119,10 +144,10 @@ form #submit {
     margin-top: 20px;
     width: 100%;
     border-radius: 10px;
-    padding: 8px 18px;
+    /* padding: 8px 18px; */
     border: none;
     color: #e5e5e5;
-    background-color: rgb(17, 17, 17);
+    background-color: #111111;
 }
 
 .span {

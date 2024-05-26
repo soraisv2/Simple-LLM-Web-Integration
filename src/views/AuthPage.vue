@@ -3,9 +3,9 @@
         <div class="row" style="min-height: 100vh;">
             <form class="f-container col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4"
                 @submit.prevent="isHaveAnAccount ? login() : register()">
-                <h1>Baby GPT</h1>
+                <h1>GPT testeur</h1>
                 <div v-if="!isHaveAnAccount">
-                    <p>Bienvenu, inscrivez vous pour chatter</p>
+                    <p>Bienvenue, inscrivez vous et chatter</p>
                     <div>
                         <input v-model="registerEmail" type="email" placeholder="Email" required /><br>
                         <input v-model="registerPassword" type="password" placeholder="Password" required />
@@ -23,7 +23,7 @@
                             alt="">Se connecter avec Google</button>
                 </div>
                 <div v-else>
-                    <p>Heureux de vous revoir, connectez vous.</p>
+                    <p>Heureux de vous revoir :)</p>
                     <div>
                         <input v-model="loginEmail" type="email" placeholder="Email" required /><br>
                         <input v-model="loginPassword" type="password" placeholder="Password" required />
@@ -68,7 +68,7 @@ export default {
                 const provider = new GoogleAuthProvider();
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                console.log("Utilisateur connecté:", user);
+                console.log("Utilisateur connecté:", user.uid);
             } catch (error) {
                 console.error("Erreur lors de la connexion avec Google:", error);
             }

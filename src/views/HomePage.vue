@@ -20,7 +20,9 @@
           <button @click="selectModel('gpt3')" :class="{ active: selected_model === 'gpt3' }">gpt3</button>
         </div>
         <div class="col-12 col-md-8" style="display: flex; justify-content: flex-start;">
-          <input id="input" type="text" @keyup.enter="askServer" placeholder="Message au model">
+          <input v-if="selected_model == 'gpt-neo'" id="input" type="text" @keyup.enter="askServer" placeholder="Message GPT-neo">
+          <input v-if="selected_model == 'gpt2'" id="input" type="text" @keyup.enter="askServer" placeholder="Message GPT-2">
+          <input v-if="selected_model == 'gpt3'" id="input" type="text" @keyup.enter="askServer" placeholder="Message GPT-3.5">
           <div>
             <img v-if="!req_loading" @click="askServer" src="@/assets/arrow.png" width="55" alt="">
             <div style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%;">
